@@ -1,10 +1,11 @@
 import React from 'react'
+import Contact from './input-search/_components/Contact'
 
 const page = () => {
   return (
-    <div>
-      <h1 className='text-pink-500 text-center'>Jai Shree Krishna</h1>
-    </div>
+    <>
+      <Contact />
+    </>
   )
 }
 
