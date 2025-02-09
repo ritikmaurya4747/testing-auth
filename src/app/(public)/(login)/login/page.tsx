@@ -1,10 +1,10 @@
 import React from 'react'
-import Contact from './input-search/_components/Contact'
+import Login from './_components/Login'
 
 const page = () => {
   return (
     <>
-      <Contact />
+      <Login />
     </>
   )
 }
