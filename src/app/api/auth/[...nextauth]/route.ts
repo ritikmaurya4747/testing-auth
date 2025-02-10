@@ -1,4 +1,4 @@
-import { connectToDatabase } from "@/app/lib/mongodb";
+import { connectToDatabase } from "@/lib/mongodb";
 import NextAuth, { NextAuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -39,10 +39,21 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   pages: {
-    signIn: "/login", // Custom login page
+    signIn: "/", // Custom login page
   },
   session: {
     strategy: "jwt", // Use JWT for session
+  },
+  cookies: {
+    sessionToken: {
+      name: "authToken",  // ✅ Set custom cookie name
+      options: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        path: "/",
+        sameSite: "lax",
+      },
+    },
   },
   callbacks: {
     async jwt({ token, user }) {
