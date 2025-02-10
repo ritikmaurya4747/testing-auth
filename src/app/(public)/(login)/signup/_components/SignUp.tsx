@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
@@ -10,200 +10,110 @@ export interface FormValues {
   email: string;
   password: string;
 }
-const SignUp = () => {
-  const [formData, setFormData] = useState<FormValues | null>(null);
 
+const SignUp = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>();
+
   async function onSubmit(data: any) {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
     try {
-      // api call to register  user
       const response = await fetch("/api/signup", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json", // Fixed typo here
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
       const result = await response.json();
       if (response.status === 200) {
-        toast.success("User registered successfully! 🎉");
-        setFormData(result);
+        toast.success("🎉 User registered successfully!");
         reset();
+        router.push("/");
       } else {
-        toast.error(data.message || "User Already exist! ❌");
-        // console.error(result);
+        toast.error(result.message || "❌ User already exists!");
       }
     } catch (error) {
-      toast.error("Something went wrong! ⚠️");
-      // console.error(error);
+      toast.error("⚠️ Something went wrong!");
+      console.error(error);
     }
   }
+
   return (
-    <div className="h-screen flex items-center justify-center">
-  <div className="w-full max-w-md px-5 py-2 bg-white rounded-lg shadow-lg">
-    <h2 className="text-2xl font-bold text-center text-gray-800 mb-5">
-      Create an Account
-    </h2>
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {/* First Name Field */}
-      <div className="mb-4">
-        <label
-          htmlFor="firstName"
-          className="block text-gray-700 font-medium mb-2"
-        >
-          First Name
-        </label>
-        <input
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 ${
-            errors.firstName
-              ? "border-red-500 focus:ring-red-500"
-              : "border-gray-300 focus:ring-blue-500"
-          }`}
-          {...register("firstName", {
-            required: "First name is required",
-            minLength: {
-              value: 3,
-              message: "Minimum length is 3 characters",
-            },
-            maxLength: {
-              value: 15,
-              message: "Maximum length is 15 characters",
-            },
-          })}
-        />
-        {errors.firstName && (
-          <p className="text-red-600 font-semibold">
-            {errors.firstName.message}
-          </p>
-        )}
+    <div className="h-screen flex items-center justify-center bg-gradient-to-r from-pink-400 to-purple-500">
+      <div className="w-full max-w-md bg-white/10 backdrop-blur-lg shadow-xl rounded-2xl px-8 py-6">
+        <h2 className="text-3xl font-bold text-white text-center mb-5">Create an Account</h2>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {/* First Name */}
+          <div className="mb-4">
+            <label className="text-white font-semibold block mb-1">First Name</label>
+            <input
+              className={`w-full px-4 py-2 bg-white/30 backdrop-blur-md text-white border border-transparent rounded-md focus:outline-none focus:ring-2 ${
+                errors.firstName ? "focus:ring-red-500" : "focus:ring-blue-300"
+              }`}
+              {...register("firstName", { required: "First name is required", minLength: 3, maxLength: 15 })}
+            />
+            {errors.firstName && <p className="text-red-300 text-sm">{errors.firstName.message}</p>}
+          </div>
+
+          {/* Last Name */}
+          <div className="mb-4">
+            <label className="text-white font-semibold block mb-1">Last Name</label>
+            <input
+              className={`w-full px-4 py-2 bg-white/30 backdrop-blur-md text-white border border-transparent rounded-md focus:outline-none focus:ring-2 ${
+                errors.lastName ? "focus:ring-red-500" : "focus:ring-blue-300"
+              }`}
+              {...register("lastName", { required: "Last name is required", minLength: 3, maxLength: 15 })}
+            />
+            {errors.lastName && <p className="text-red-300 text-sm">{errors.lastName.message}</p>}
+          </div>
+
+          {/* Email */}
+          <div className="mb-4">
+            <label className="text-white font-semibold block mb-1">Email</label>
+            <input
+              className={`w-full px-4 py-2 bg-white/30 backdrop-blur-md text-white border border-transparent rounded-md focus:outline-none focus:ring-2 ${
+                errors.email ? "focus:ring-red-500" : "focus:ring-blue-300"
+              }`}
+              {...register("email", { required: "Email is required", minLength: 8, maxLength: 35 })}
+            />
+            {errors.email && <p className="text-red-300 text-sm">{errors.email.message}</p>}
+          </div>
+
+          {/* Password */}
+          <div className="mb-6">
+            <label className="text-white font-semibold block mb-1">Password</label>
+            <input
+              type="password"
+              className={`w-full px-4 py-2 bg-white/30 backdrop-blur-md text-white border border-transparent rounded-md focus:outline-none focus:ring-2 ${
+                errors.password ? "focus:ring-red-500" : "focus:ring-blue-300"
+              }`}
+              {...register("password", { required: "Password is required", minLength: 3, maxLength: 50 })}
+            />
+            {errors.password && <p className="text-red-300 text-sm">{errors.password.message}</p>}
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full bg-white/20 hover:bg-white/30 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white"
+          >
+            {isSubmitting ? "Please wait..." : "Sign Up"}
+          </button>
+        </form>
+
+        {/* Link to Login */}
+        <div className="text-center mt-4">
+          <Link href="/" className="text-white hover:underline">
+            Already have an account?
+          </Link>
+        </div>
       </div>
-
-      {/* Last Name Field */}
-      <div className="mb-4">
-        <label
-          htmlFor="lastName"
-          className="block text-gray-700 font-medium mb-2"
-        >
-          Last Name
-        </label>
-        <input
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 ${
-            errors.lastName
-              ? "border-red-500 focus:ring-red-500"
-              : "border-gray-300 focus:ring-blue-500"
-          }`}
-          {...register("lastName", {
-            required: "Last name is required",
-            minLength: {
-              value: 3,
-              message: "Minimum length is 3 characters",
-            },
-            maxLength: {
-              value: 15,
-              message: "Maximum length is 15 characters",
-            },
-          })}
-        />
-        {errors.lastName && (
-          <p className="text-red-600 font-semibold">
-            {errors.lastName.message}
-          </p>
-        )}
-      </div>
-
-      {/* Email Field */}
-      <div className="mb-4">
-        <label
-          htmlFor="email"
-          className="block text-gray-700 font-medium mb-2"
-        >
-          Email
-        </label>
-        <input
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 ${
-            errors.email
-              ? "border-red-500 focus:ring-red-500"
-              : "border-gray-300 focus:ring-blue-500"
-          }`}
-          {...register("email", {
-            required: "Email is required",
-            minLength: {
-              value: 8,
-              message: "Minimum length is 8 characters",
-            },
-            maxLength: {
-              value: 35,
-              message: "Maximum length is 35 characters",
-            },
-          })}
-        />
-        {errors.email && (
-          <p className="text-red-600 font-semibold">
-            {errors.email.message}
-          </p>
-        )}
-      </div>
-
-      {/* Password Field */}
-      <div className="mb-5">
-        <label
-          htmlFor="password"
-          className="block text-gray-700 font-medium mb-2"
-        >
-          Password
-        </label>
-        <input
-          type="password"
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 ${
-            errors.password
-              ? "border-red-500 focus:ring-red-500"
-              : "border-gray-300 focus:ring-blue-500"
-          }`}
-          {...register("password", {
-            required: "Password is required",
-            minLength: {
-              value: 8,
-              message: "Minimum length is 8 characters",
-            },
-            maxLength: {
-              value: 50,
-              message: "Maximum length is 50 characters",
-            },
-          })}
-        />
-        {errors.password && (
-          <p className="text-red-600 font-semibold">
-            {errors.password.message}
-          </p>
-        )}
-      </div>
-
-      {/* Submit Button */}
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50"
-      >
-        {isSubmitting ? "Please wait..." : "Sign Up"}
-      </button>
-    </form>
-
-    {/* Link to Login */}
-    <div className="text-center mt-4">
-      <Link href="/login" className="text-pink-500 hover:underline">
-        Already have an account?
-      </Link>
     </div>
-  </div>
-</div>
-
   );
 };
 

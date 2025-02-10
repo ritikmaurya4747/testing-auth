@@ -7,11 +7,10 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 export interface FormValues {
-  firstName: string;
-  lastName: string;
   email: string;
   password: string;
 }
+
 const Login = () => {
   const [isClient, setIsClient] = useState(false);
   const {
@@ -21,10 +20,10 @@ const Login = () => {
     formState: { errors },
   } = useForm<FormValues>();
 
-  // Ensure router only works on the client-side
   useEffect(() => {
     setIsClient(true);
   }, []);
+  
   const router = useRouter();
 
   async function onSubmit(data: FormValues) {
@@ -35,28 +34,26 @@ const Login = () => {
     });
 
     if (result?.error) {
-      toast.error("Invalid email or password! ");
+      toast.error("Invalid email or password!");
     } else {
-      toast.success("Login Successful! ");
-      router.push("/");
+      toast.success("Login Successful!");
+      router.push("/input-search");
     }
     reset();
   }
+
   if (!isClient) return null;
 
   return (
-    <div className="h-screen flex items-center justify-center">
-      <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md ">
-        <h2 className="text-2xl font-bold text-center text-gray-700 mb-4">
-          Login
+    <div className="h-screen flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500">
+      <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-lg">
+        <h2 className="text-3xl font-extrabold text-gray-800 text-center mb-6">
+          Welcome Back! 👋
         </h2>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Email Field */}
-          <div className="mb-4">
-            <label
-              htmlFor="email"
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
+          <div>
+            <label htmlFor="email" className="block text-gray-600 font-semibold">
               Email:
             </label>
             <input
@@ -68,23 +65,21 @@ const Login = () => {
                   message: "Invalid email format",
                 },
               })}
-              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 ${
+              className={`w-full mt-1 px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 ${
                 errors.email
-                  ? "border-pink-500 focus:ring-pink-500"
-                  : "border-gray-300 focus:ring-pink-500"
+                  ? "border-red-500 focus:ring-red-400"
+                  : "border-gray-300 focus:ring-pink-400"
               }`}
+              placeholder="Enter your email"
             />
             {errors.email && (
-              <p className="text-pink-600 text-sm">{errors.email.message}</p>
+              <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
             )}
           </div>
 
           {/* Password Field */}
-          <div className="mb-4">
-            <label
-              htmlFor="password"
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
+          <div>
+            <label htmlFor="password" className="block text-gray-600 font-semibold">
               Password:
             </label>
             <input
@@ -92,33 +87,39 @@ const Login = () => {
               {...register("password", {
                 required: "Password is required",
                 minLength: {
-                  value: 6,
+                  value: 3,
                   message: "Minimum length should be 6 characters",
                 },
               })}
-              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 ${
+              className={`w-full mt-1 px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 ${
                 errors.password
-                  ? "border-pink-500 focus:ring-pink-500"
-                  : "border-gray-300 focus:ring-pink-500"
+                  ? "border-red-500 focus:ring-red-400"
+                  : "border-gray-300 focus:ring-pink-400"
               }`}
+              placeholder="Enter your password"
             />
             {errors.password && (
-              <p className="text-pink-600 text-sm">{errors.password.message}</p>
+              <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
             )}
           </div>
 
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-pink-500 text-white py-2 rounded-md hover:bg-pink-600 transition duration-200"
+            className="w-full bg-pink-500 text-white py-3 rounded-lg font-semibold hover:bg-pink-600 transition duration-300"
           >
             Login
           </button>
         </form>
-        <div className="text-center mt-4">
-          <Link href="/signup" className="text-pink-500 hover:underline">
-            Don't have an account? Sign Up
-          </Link>
+
+        {/* Signup Link */}
+        <div className="text-center mt-5">
+          <p className="text-gray-600">
+            Don't have an account?{" "}
+            <Link href="/signup" className="text-pink-500 font-semibold hover:underline">
+              Sign Up
+            </Link>
+          </p>
         </div>
       </div>
     </div>
