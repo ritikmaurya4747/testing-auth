@@ -37,7 +37,7 @@ const Login = () => {
       toast.error("Invalid email or password!");
     } else {
       toast.success("Login Successful!");
-      // router.push("/input-search");
+      router.push("/dashboard");
     }
     reset();
   }
