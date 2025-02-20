@@ -13,11 +13,11 @@ const Dashboard = () => {
           <a href="#" className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md">
             <FaHome /> <span>Home</span>
           </a>
-          <a href="#" className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md">
-            <FaUser /> <span>Profile</span>
+          <a href="/input-search" className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md">
+            <FaUser /> <span>Input Search</span>
           </a>
-          <a href="#" className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md">
-            <FaCog /> <span>Settings</span>
+          <a href="/input-search" className="flex items-center space-x-2 p-2 hover:bg-gray-700 rounded-md">
+            <FaCog /> <span>C.R.U.D</span>
           </a>
         </nav>
         <button

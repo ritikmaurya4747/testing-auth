@@ -3,6 +3,7 @@ import { useState } from "react";
 import { signOut } from "next-auth/react";
 import TableContact from "./TableContact";
 import { FaSignOutAlt } from "react-icons/fa";
+import Link from "next/link";
 
 const Contacts = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,6 +28,9 @@ const Contacts = () => {
           />
 
           {/* Add Contact Button */}
+          <Link href="/dashboard" className="bg-blue-500 text-white px-4 py-2 rounded">
+            Dashboard
+          </Link>
           <button className="bg-blue-500 text-white px-4 py-2 rounded">
             Add Contact
           </button>
