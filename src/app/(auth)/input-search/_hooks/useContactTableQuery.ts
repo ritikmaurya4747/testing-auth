@@ -1,17 +1,19 @@
-import { QueryClient, useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
-import { fetchContacts } from "../_actions/getContactData";
+import { getContactData } from "../_actions/getContactData";
 
 const QUERY_KEY = ["contact-table-page-data"];
-const useContactTableDataQuery = async () => {
-  const queryClient = new QueryClient();
+
+const useContactTableQuery = () => {
+  const queryClient =  useQueryClient();
+
   const reset = useCallback(
-    () => ({ queryKey: QUERY_KEY, exact: true }),
+    () => queryClient.resetQueries({ queryKey: QUERY_KEY, exact: true }),
     [queryClient]
   );
   const query = useQuery({
     queryKey: QUERY_KEY,
-    queryFn: fetchContacts,
+    queryFn: getContactData,
     staleTime: 60 * 1000,
     refetchOnWindowFocus: false,
     retry: 3,
@@ -21,4 +23,4 @@ const useContactTableDataQuery = async () => {
   return { ...query, reset };
 };
 
-export default useContactTableDataQuery;
+export default useContactTableQuery;

@@ -1,20 +1,31 @@
 "use client";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import Loader from "@/common/components/Loader";
-import useContactTableQuery from "../_hooks/useContactTableQuery";
-import { Contact, TableContactProps } from "../_types/types";
+import React, { useEffect, useState } from "react";
+import { FaTrash, FaEdit } from "react-icons/fa";
+// import { contacts as contactData, contacts } from "@/app/api/contact/route";
+import { getContactData } from "../_actions/getContactData";
+import { ContactData, TableContactProps } from "../_types/types";
+
 
 const TableContact = ({ searchTerm }: TableContactProps) => {
-
-  // data fetching from tanstack query
-  const { data: contactData, isLoading, error } = useContactTableQuery();
-  
-  if (isLoading) return <Loader />;
-  if (error) return "Something went wrong";
+  const [contactData, setContactData] = useState<ContactData[]>([]);
+  const [loading, setLoading] = useState(true);
+// direct data fetching from mongodb 
+  useEffect(() => {
+    const fetchContactData = async () => {
+      setLoading(true);
+      try {
+        const data = await getContactData();
+        setContactData(data);
+      } catch (error) {
+        console.error("Error fetching contacts:", error);
+      }
+    };
+    fetchContactData();
+  }, []);
 
   // Search Filter Based on Name and Email.
-  const filteredContacts = contactData?.filter(
-    (contact: Contact) =>
+  const filteredContacts = contactData.filter(
+    (contact) =>
       contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       contact.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -35,7 +46,7 @@ const TableContact = ({ searchTerm }: TableContactProps) => {
         </thead>
         <tbody>
           {filteredContacts.length > 0 ? (
-            filteredContacts.map((contact: Contact, index: number) => (
+            filteredContacts.map((contact, index) => (
               <tr key={index} className="border-b hover:bg-gray-50">
                 <td className="py-3 px-4">
                   <input type="checkbox" className="w-5 h-5" />

@@ -1,12 +1,12 @@
-type Contact = {
+export type Contact = {
     _id: string;
     name: string;
     email: string;
 };
-type TableContactProps = {
+export type TableContactProps = {
   searchTerm: string;
 };
-type ContactData = {
+export type ContactData = {
   _id: string;
   name: string;
   email: string;
