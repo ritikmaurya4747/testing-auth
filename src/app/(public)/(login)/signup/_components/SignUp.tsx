@@ -20,7 +20,7 @@ const SignUp = () => {
     formState: { errors, isSubmitting },
   } = useForm<FormValues>();
 
-  async function onSubmit(data: any) {
+  async function onSubmit(data: FormValues) {
     try {
       const response = await fetch("/api/signup", {
         method: "POST",

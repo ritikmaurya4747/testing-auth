@@ -1,12 +1,11 @@
 "use client";
-import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 import Loader from "@/common/components/Loader";
+import { useState } from "react";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import { useContactsMutations } from "../_hooks/useContactsMutations";
 import useContactTableQuery from "../_hooks/useContactTableQuery";
 import { Contact, TableContactProps } from "../_types/types";
 import ContactModal from "./ContactModal";
-import { useState } from "react";
-import { useContactsMutations } from "../_hooks/useContactsMutations";
-import { toast } from "react-toastify";
 
 const TableContact = ({ searchTerm }: TableContactProps) => {
   // data fetching from tanstack query

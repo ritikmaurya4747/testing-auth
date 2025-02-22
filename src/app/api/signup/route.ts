@@ -1,5 +1,4 @@
 import { connectToDatabase } from "@/lib/mongodb"; // Adjust the path
-import UserModel from "@/models/User";
 import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 
